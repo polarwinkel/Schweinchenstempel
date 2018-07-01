@@ -109,6 +109,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(createPage())
 
 parseNamen()
+if not os.path.isfile(schweinchenfile):
+	reset() 
 socketserver.TCPServer.allow_reuse_address = True
 httpd = socketserver.TCPServer(('', port), Handler)
 httpd.serve_forever()
