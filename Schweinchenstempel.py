@@ -53,8 +53,8 @@ def createPage():
     for kind in kinder:
         page = page+'<h1>'+kind+'</h1>\n'
         page = page+getSchweinchen(kind, data[kind])
-        page = page+'<form method="post" enctype="text/plain"><button name="Schweinchen" value="%s"><img src="Schweinchen.svg" height=50"px" /></button>'% kind
-        page = page+'<button name="Sternchen" value="%s"><img src="Sternchen.svg" height=50"px" /></button></form>'% kind
+        page = page+'<form method="post" enctype="text/plain"><button name="Schweinchen" value="%s"><img src="Schweinchen.svg" height="150px" /></button>'% kind
+        page = page+'<button name="Sternchen" value="%s"><img src="Sternchen.svg" height="150px" /></button></form>'% kind
     page = page+'<form method="post" enctype="text/plain"><button name="reset" value="true">Reset</button></form>'
     page = page+'<body></html>'
     return bytes(page, 'utf8')
@@ -64,10 +64,10 @@ def getSchweinchen(name, data):
     # TODO: Schweinchen in yml-Datei speichern (mit Datum)
     ergebnis = ''
     for s in data['Schweinchen']:
-        ergebnis = ergebnis+'<img src="Schweinchen.svg" height=50"px" />'
+        ergebnis = ergebnis+'<img src="Schweinchen.svg" height="150px" />'
     ergebnis = ergebnis+'<br />\n'
     for s in data['Sternchen']:
-        ergebnis = ergebnis+'<img src="Sternchen.svg" height=50"px" />'
+        ergebnis = ergebnis+'<img src="Sternchen.svg" height="150px" />'
     return ergebnis
 
 def changeSchweinchen(post_data):
