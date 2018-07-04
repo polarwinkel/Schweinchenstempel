@@ -93,7 +93,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.end_headers()
         if self.path.endswith(".svg"):
-            f=open('.'+self.path, 'rb')
+            f=open(os.path.basename(self.path), 'rb')
             self.wfile.write(f.read())
             f.close()
         else:
