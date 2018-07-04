@@ -22,9 +22,10 @@ from http import HTTPStatus
 from collections import OrderedDict
 import yaml
 import os
+import datetime
 
 namen = 'Ole,Erik,Lasse'
-anzahl = '5'
+#anzahl = '5'
 
 port = 2121
 schweinchenfile = 'schweinchen.yml'
@@ -48,26 +49,31 @@ def reset():
 
 def createPage():
     ''' Create the HTML-Page based on the saved data '''
-    page = '<html><head><title>Schweinchen- und Sternchenstempel</title><style>body{font-family: Arial, Helvetica, sans-serif;}</style></head>\n<body>\n'
+    page = '<!doctype html><html><head><title>Schweinchen- und Sternchenstempel</title><style>body{font-family: Arial, Helvetica, sans-serif;}</style></head>\n<body>\n'
     data = yaml.load(open(schweinchenfile, 'r'))
     for kind in kinder:
-        page = page+'<h1>'+kind+'</h1>\n'
+        page = page+'<h1 style="font-size:50px; margin:0; padding-bottom:0;">'+kind+'</h1>\n'
         page = page+getSchweinchen(kind, data[kind])
-        page = page+'<form method="post" enctype="text/plain"><button name="Schweinchen" value="%s"><img src="Schweinchen.svg" height="150px" /></button>'% kind
-        page = page+'<button name="Sternchen" value="%s"><img src="Sternchen.svg" height="150px" /></button></form>'% kind
-    page = page+'<form method="post" enctype="text/plain"><button name="reset" value="true">Reset</button></form>'
-    page = page+'<body></html>'
+        page = page+'<form method="post" enctype="text/plain">\n'
+        page = page+'<button name="Schweinchen" value="%s"><p style="font-size:50px; margin:0;">+1<img src="Schweinchen.svg" height="60px" /></p></button>\n'% kind
+        page = page+'<button name="Sternchen" value="%s"><p style="font-size:50px; margin:0;">+1<img src="Sternchen.svg" height="60px" /></p></button><br />\n'% kind
+        page = page+'</form><br />\n'
+        page = page+'<hr>'
+    page = page+'<form method="post" enctype="text/plain"><button name="reset" value="true"><p style="font-size:50px; margin:0;">Reset</p></button></form>\n'
+    page = page+'</body></html>'
     return bytes(page, 'utf8')
 
 def getSchweinchen(name, data):
     ''' Creates the Schweinchen-Content depending on the saved Schweinchen '''
-    # TODO: Schweinchen in yml-Datei speichern (mit Datum)
     ergebnis = ''
     for s in data['Schweinchen']:
-        ergebnis = ergebnis+'<img src="Schweinchen.svg" height="150px" />'
-    ergebnis = ergebnis+'<br />\n'
+        ergebnis = ergebnis+'<figure style="float:left;"><img src="Schweinchen.svg" height="120px" alt="%s" />'% s
+        ergebnis = ergebnis+'<figcaption>%s</figcaption></figure>\n'% s
+    ergebnis = ergebnis+'<br style="clear:both" />\n'
     for s in data['Sternchen']:
-        ergebnis = ergebnis+'<img src="Sternchen.svg" height="150px" />'
+        ergebnis = ergebnis+'<figure style="float:left;"><img src="Sternchen.svg" height="120px" alt="%s"/>'% s
+        ergebnis = ergebnis+'<figcaption>%s</figcaption></figure>\n'% s
+    ergebnis = ergebnis+'<br style="clear:both" />'
     return ergebnis
 
 def changeSchweinchen(post_data):
@@ -79,10 +85,10 @@ def changeSchweinchen(post_data):
     data = yaml.load(open(schweinchenfile, 'r'))
     for kind in kinder:
         if 'Schweinchen='+kind in post_data:
-            data[kind]['Schweinchen'].append('TODO: Zeitstempel neues Schweinchen')
+            data[kind]['Schweinchen'].append('{0:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()))
             yaml.safe_dump(data, open(schweinchenfile, 'w'))
         elif 'Sternchen='+kind in post_data:
-            data[kind]['Sternchen'].append('TODO: Zeitstempel neues Sternchen')
+            data[kind]['Sternchen'].append('{0:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()))
             yaml.safe_dump(data, open(schweinchenfile, 'w'))
 
 class Handler(http.server.SimpleHTTPRequestHandler):
