@@ -109,6 +109,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(createPage())
 
 parseNamen()
+if os.path.dirname(__file__) != '':
+	os.chdir(os.path.dirname(__file__))
 if not os.path.isfile(schweinchenfile):
 	reset() 
 socketserver.TCPServer.allow_reuse_address = True
